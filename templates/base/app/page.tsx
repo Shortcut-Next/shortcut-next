@@ -14,6 +14,7 @@
 
 import PlaceholderLandingPage from '@/components/landing/PlaceholderLandingPage'
 
+
 export default function Page() {
   return <PlaceholderLandingPage />
 }

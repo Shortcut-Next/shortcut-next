@@ -1,0 +1,292 @@
+'use client'
+
+/**
+ * PlaceholderLandingPage
+ *
+ * A fully functional landing page included as a starting point.
+ * Once you are ready to build your own product page, remove this component
+ * and replace the import in `app/page.tsx` with your own implementation.
+ *
+ * ─── Content configuration ───────────────────────────────────────────────────
+ * All visible text, links, and section-visibility toggles are managed through
+ * a single static file:
+ *
+ *   @/components/landing/landingContent.ts
+ *
+ * You can rename headings, adjust copy, swap URLs, or hide entire sections
+ * (hero, features, stats, FAQ, CTA, etc.) by setting `visible: false` on the
+ * relevant section — without touching any component code.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+import { useEffect, useRef } from 'react'
+import { gsap } from '@/lib/gsap'
+import { useTheme } from '@mui/material'
+import { alpha } from '@mui/material/styles'
+import Nav from '@/components/landing/Nav'
+import Hero from '@/components/landing/Hero'
+import InstallBanner from '@/components/landing/InstallBanner'
+import Features from '@/components/landing/Features'
+import CodeDemo from '@/components/landing/CodeDemo'
+import TechStack from '@/components/landing/TechStack'
+import WhatYouGet from '@/components/landing/WhatYouGet'
+import HowItWorks from '@/components/landing/HowItWorks'
+import Stats from '@/components/landing/Stats'
+import FAQ from '@/components/landing/FAQ'
+import CTA from '@/components/landing/CTA'
+import Footer from '@/components/landing/Footer'
+import { landingContent as lc } from '@/components/landing/landingContent'
+
+// ---------------------------------------------------------------------------
+// SectionMarker — decorative "+" rendered at the guide-line ends of dividers
+// ---------------------------------------------------------------------------
+
+function SectionMarker({ side }: { side: 'left' | 'right' }) {
+  const theme = useTheme()
+  const offset = 'calc(50% - 600px)'
+  const translateX = side === 'left' ? '-50%' : '50%'
+
+  return (
+    <span
+      className='section-marker'
+      style={{
+        position: 'absolute',
+        top: '50%',
+        [side]: offset,
+        transform: `translate(${translateX}, -50%)`,
+        fontSize: '1.1rem',
+        lineHeight: 1,
+        color: alpha(theme.palette.primary.main, 0.55),
+        fontWeight: 300,
+        letterSpacing: 0,
+        userSelect: 'none',
+        pointerEvents: 'none'
+      }}
+    >
+      +
+    </span>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// ParallaxDivider — animated horizontal rule between sections
+// ---------------------------------------------------------------------------
+
+function ParallaxDivider({ direction = 'left' }: { direction?: 'left' | 'right' }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const theme = useTheme()
+  const primaryMain = theme.palette.primary.main
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!ref.current) return
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ref.current,
+        { scaleX: 0, opacity: 0 },
+        {
+          scaleX: 1,
+          opacity: 0.3,
+          duration: 1.2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: ref.current,
+            start: 'top 90%',
+            once: true
+          }
+        }
+      )
+    }, ref)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <SectionMarker side='left' />
+      <SectionMarker side='right' />
+      <div
+        ref={ref}
+        style={{
+          width: '100%',
+          maxWidth: '1200px',
+          margin: '0 auto',
+          height: '1px',
+          background: `linear-gradient(${direction === 'left' ? 'to right' : 'to left'}, ${primaryMain}, transparent)`,
+          opacity: 0,
+          transformOrigin: direction === 'left' ? 'left center' : 'right center',
+          boxShadow: `0 0 20px ${direction === 'left' ? primaryMain : 'transparent'}`
+        }}
+      />
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// PlaceholderLandingPage
+// ---------------------------------------------------------------------------
+
+export default function PlaceholderLandingPage() {
+  const heroWrapperRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLElement>(null)
+  const theme = useTheme()
+  const primaryMain = theme.palette.primary.main
+  const bgDefault = theme.palette.background.default
+
+  useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced) return
+    if (!heroWrapperRef.current || !contentRef.current) return
+
+    heroWrapperRef.current.style.willChange = 'transform, opacity'
+
+    const ctx = gsap.context(() => {
+      gsap.to(heroWrapperRef.current, {
+        scale: 0.85,
+        opacity: 0,
+        y: -100,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: contentRef.current,
+          start: 'top bottom',
+          end: 'top 30%',
+          scrub: 1.5,
+          onLeave: () => {
+            if (heroWrapperRef.current) {
+              heroWrapperRef.current.style.willChange = 'auto'
+            }
+          }
+        }
+      })
+
+      gsap.from(contentRef.current, {
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: contentRef.current,
+          start: 'top 85%',
+          once: true
+        }
+      })
+    })
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <>
+      {lc.nav.visible && <Nav />}
+
+      {/* Hero — fixed position, scales away as the user scrolls */}
+      {lc.hero.visible && (
+        <div
+          ref={heroWrapperRef}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100vh',
+            zIndex: 1
+          }}
+        >
+          <Hero />
+        </div>
+      )}
+
+      {/* Main content — higher z-index covers the fixed hero */}
+      <main
+        ref={contentRef}
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          marginTop: '100vh',
+          background: bgDefault,
+          overflowX: 'hidden'
+        }}
+      >
+        {/* Vertical guide lines — visible only on lg+ screens */}
+        <div
+          className='guide-line guide-line--left'
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 'calc(50% - 600px)',
+            width: '1px',
+            background: `linear-gradient(to bottom, transparent, ${alpha(primaryMain, 0.12)} 10%, ${alpha(primaryMain, 0.12)} 90%, transparent)`,
+            pointerEvents: 'none',
+            zIndex: 0
+          }}
+        />
+        <div
+          className='guide-line guide-line--right'
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            right: 'calc(50% - 600px)',
+            width: '1px',
+            background: `linear-gradient(to bottom, transparent, ${alpha(primaryMain, 0.12)} 10%, ${alpha(primaryMain, 0.12)} 90%, transparent)`,
+            pointerEvents: 'none',
+            zIndex: 0
+          }}
+        />
+
+        <ParallaxDivider direction='left' />
+
+        {lc.installBanner.visible && <InstallBanner />}
+
+        <ParallaxDivider direction='right' />
+
+        {lc.features.visible && <Features />}
+
+        <ParallaxDivider direction='left' />
+
+        {lc.codeDemo.visible && <CodeDemo />}
+
+        <ParallaxDivider direction='right' />
+
+        {lc.techStack.visible && <TechStack />}
+
+        <ParallaxDivider direction='left' />
+
+        {lc.whatYouGet.visible && <WhatYouGet />}
+
+        <ParallaxDivider direction='right' />
+
+        {lc.howItWorks.visible && <HowItWorks />}
+
+        <ParallaxDivider direction='left' />
+
+        {lc.stats.visible && <Stats />}
+
+        <ParallaxDivider direction='right' />
+
+        {lc.faq.visible && <FAQ />}
+
+        <ParallaxDivider direction='left' />
+
+        {lc.cta.visible && <CTA />}
+
+        {lc.footer.visible && <Footer />}
+      </main>
+
+      <style>{`
+        .guide-line,
+        .section-marker {
+          display: none;
+        }
+        @media (min-width: 1024px) {
+          .guide-line,
+          .section-marker {
+            display: block;
+          }
+        }
+      `}</style>
+    </>
+  )
+}

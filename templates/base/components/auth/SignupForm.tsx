@@ -1,6 +1,6 @@
 'use client'
 
-import { Stack, Typography, TextField, Button, InputAdornment, IconButton, MenuItem } from '@mui/material'
+import { Stack, Typography, TextField, Button, InputAdornment, IconButton } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
@@ -49,13 +49,6 @@ const fadeInUp = {
     transition: { duration: 0.25, ease: 'easeOut' as const }
   }
 }
-
-const ROLES: { value: UserRole; label: string; description: string }[] = [
-  { value: 'admin', label: 'Admin', description: 'Full access to everything' },
-  { value: 'manager', label: 'Manager', description: 'Manage users, tickets, and reports' },
-  { value: 'agent', label: 'Agent', description: 'Handle tickets and view reports' },
-  { value: 'viewer', label: 'Viewer', description: 'View-only access' }
-]
 
 const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
   const { t } = useTranslation()
@@ -227,40 +220,6 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
             </motion.div>
 
             <motion.div variants={fadeInUp}>
-              <FormFieldWrapper title={t('signup.role', 'Role')}>
-                <Controller
-                  name='role'
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      select
-                      fullWidth
-                      size='small'
-                      error={!!errors.role}
-                      helperText={
-                        errors.role?.message || t('signup.roleHelp', 'Select a role for testing authorization')
-                      }
-                    >
-                      {ROLES.map(role => (
-                        <MenuItem key={role.value} value={role.value}>
-                          <Stack>
-                            <Typography variant='body2' fontWeight={500}>
-                              {role.label}
-                            </Typography>
-                            <Typography variant='caption' color='text.secondary'>
-                              {role.description}
-                            </Typography>
-                          </Stack>
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  )}
-                />
-              </FormFieldWrapper>
-            </motion.div>
-
-            <motion.div variants={fadeInUp}>
               <FormFieldWrapper title={t('signup.password', 'Password')}>
                 <Controller
                   name='password'
@@ -321,7 +280,6 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
                 loading={isLoading}
                 type='submit'
                 variant='contained'
-                size='large'
                 fullWidth
                 disabled={isSubmitting}
                 sx={{ mt: 2 }}

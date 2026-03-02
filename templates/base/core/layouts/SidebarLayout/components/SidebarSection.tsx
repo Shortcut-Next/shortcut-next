@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Box, IconButton, Tooltip, Typography } from '@mui/material'
+import { Box, Divider, IconButton, Tooltip, Typography } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { useSidebar } from '../SidebarContext'
@@ -14,9 +14,10 @@ import Icon from '@/components/icon/Icon'
 
 interface Props {
   item: SidebarSection
+  isFirst?: boolean
 }
 
-export default function SidebarSectionItem({ item }: Props) {
+export default function SidebarSectionItem({ item, isFirst = false}: Props) {
   const { isCollapsed } = useSidebar()
   const router = useRouter()
   const { language } = useLanguage()
@@ -33,6 +34,18 @@ export default function SidebarSectionItem({ item }: Props) {
 
   return (
     <Box>
+      <AnimatePresence initial={false}>
+        {isCollapsed && !isFirst && (
+          <motion.div
+            key='section-divider'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.2, delay: 0.15, ease: 'easeOut' } }}
+            exit={{ opacity: 0, transition: { duration: 0.1, ease: 'easeIn' } }}
+          >
+            <Divider sx={{ mx: 1.5, my: 1 }} />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <AnimatePresence initial={false}>
         {!isCollapsed && (
           <motion.div

@@ -1,6 +1,6 @@
 'use client'
 
-import { Stack, Typography, TextField, Button, InputAdornment, IconButton, MenuItem } from '@mui/material'
+import { Stack, Typography, TextField, Button, InputAdornment, IconButton } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
@@ -49,13 +49,6 @@ const fadeInUp = {
     transition: { duration: 0.25, ease: 'easeOut' as const }
   }
 }
-
-const ROLES: { value: UserRole; label: string; description: string }[] = [
-  { value: 'admin', label: 'Admin', description: 'Full access to everything' },
-  { value: 'manager', label: 'Manager', description: 'Manage users, tickets, and reports' },
-  { value: 'agent', label: 'Agent', description: 'Handle tickets and view reports' },
-  { value: 'viewer', label: 'Viewer', description: 'View-only access' }
-]
 
 const SignupForm: React.FC<SignupFormProps> = ({ onSwitchToLogin }) => {
   const { t } = useTranslation()

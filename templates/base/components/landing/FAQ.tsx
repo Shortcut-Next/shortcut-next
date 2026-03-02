@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { gsap, ScrollTrigger } from '@/lib/gsap'
+import { gsap } from '@/lib/gsap'
 import SectionLabel from '@/components/landing/SectionLabel'
 import { landingContent as lc } from '@/components/landing/landingContent'
 import { useTheme } from '@mui/material'
@@ -34,9 +34,13 @@ export default function FAQ() {
       })
 
       gsap.from('[data-faq-item]', {
-        y: 30, rotationX: -5, scale: 0.95, autoAlpha: 0,
+        y: 30,
+        rotationX: -5,
+        scale: 0.95,
+        autoAlpha: 0,
         stagger: { amount: 0.5, from: 'start', ease: 'power2.out' },
-        duration: 0.7, ease: 'power3.out',
+        duration: 0.7,
+        ease: 'power3.out',
         onComplete: () => {
           items?.forEach(item => {
             if (item instanceof HTMLElement) item.style.willChange = 'auto'
@@ -48,14 +52,18 @@ export default function FAQ() {
       const title = containerRef.current?.querySelector('h2')
       if (title) {
         gsap.from(title, {
-          y: 30, autoAlpha: 0, duration: 0.8, ease: 'power3.out',
+          y: 30,
+          autoAlpha: 0,
+          duration: 0.8,
+          ease: 'power3.out',
           scrollTrigger: { trigger: containerRef.current, start: 'top 85%', once: true }
         })
       }
 
       items?.forEach((item, i) => {
         gsap.to(item, {
-          y: (i - items.length / 2) * -5, ease: 'none',
+          y: (i - items.length / 2) * -5,
+          ease: 'none',
           scrollTrigger: { trigger: containerRef.current, start: 'top bottom', end: 'bottom top', scrub: 1.5 }
         })
       })
@@ -84,7 +92,13 @@ export default function FAQ() {
         }
         if (currentItem) {
           if (prefersReduced) currentItem.style.borderLeft = '3px solid transparent'
-          else gsap.to(currentItem, { borderLeftColor: 'transparent', borderLeftWidth: '3px', duration: 0.3, ease: 'power2.inOut' })
+          else
+            gsap.to(currentItem, {
+              borderLeftColor: 'transparent',
+              borderLeftWidth: '3px',
+              duration: 0.3,
+              ease: 'power2.inOut'
+            })
         }
         if (currentQuestion) {
           if (prefersReduced) currentQuestion.style.color = textPrimary
@@ -118,7 +132,8 @@ export default function FAQ() {
       }
       if (item) {
         if (prefersReduced) item.style.borderLeft = `3px solid ${primaryMain}`
-        else gsap.to(item, { borderLeftColor: primaryMain, borderLeftWidth: '3px', duration: 0.3, ease: 'power2.inOut' })
+        else
+          gsap.to(item, { borderLeftColor: primaryMain, borderLeftWidth: '3px', duration: 0.3, ease: 'power2.inOut' })
       }
       if (question) {
         if (prefersReduced) question.style.color = primaryMain
@@ -154,28 +169,73 @@ export default function FAQ() {
           <div
             key={i}
             data-faq-item
-            ref={el => { itemRefs.current[i] = el }}
-            style={{ borderBottom: `1px solid ${divider}`, borderLeft: '3px solid transparent', padding: '20px 0 20px 16px', transition: 'none' }}
+            ref={el => {
+              itemRefs.current[i] = el
+            }}
+            style={{
+              borderBottom: `1px solid ${divider}`,
+              borderLeft: '3px solid transparent',
+              padding: '20px 0 20px 16px',
+              transition: 'none'
+            }}
           >
             <button
               onClick={() => toggle(i)}
-              style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left' }}
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '100%',
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer',
+                textAlign: 'left'
+              }}
             >
               <span
-                ref={el => { questionRefs.current[i] = el }}
+                ref={el => {
+                  questionRefs.current[i] = el
+                }}
                 style={{ fontWeight: 600, fontSize: '1rem', color: textPrimary, fontFamily: 'var(--font)' }}
               >
                 {faq.question}
               </span>
               <span
-                ref={el => { iconRefs.current[i] = el }}
-                style={{ fontSize: '1.4rem', color: textSecondary, lineHeight: 1, flexShrink: 0, marginLeft: '16px', display: 'inline-block', fontFamily: 'var(--font)' }}
+                ref={el => {
+                  iconRefs.current[i] = el
+                }}
+                style={{
+                  fontSize: '1.4rem',
+                  color: textSecondary,
+                  lineHeight: 1,
+                  flexShrink: 0,
+                  marginLeft: '16px',
+                  display: 'inline-block',
+                  fontFamily: 'var(--font)'
+                }}
               >
                 +
               </span>
             </button>
-            <div ref={el => { answerRefs.current[i] = el }} style={{ height: 0, overflow: 'hidden' }}>
-              <p style={{ color: textSecondary, fontFamily: 'var(--font)', fontWeight: 400, fontSize: '0.9rem', lineHeight: 1.7, paddingTop: '12px', margin: 0 }}>
+            <div
+              ref={el => {
+                answerRefs.current[i] = el
+              }}
+              style={{ height: 0, overflow: 'hidden' }}
+            >
+              <p
+                style={{
+                  color: textSecondary,
+                  fontFamily: 'var(--font)',
+                  fontWeight: 400,
+                  fontSize: '0.9rem',
+                  lineHeight: 1.7,
+                  paddingTop: '12px',
+                  margin: 0
+                }}
+              >
                 {faq.answer}
               </p>
             </div>

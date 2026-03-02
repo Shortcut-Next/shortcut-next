@@ -131,8 +131,28 @@ export const landingContent: LandingContent = {
   // ─── Install Banner ────────────────────────────────────────────────────────
   installBanner: {
     visible: true,
-    row1: ['Next.js 15', 'App Router', 'MUI v7', 'TypeScript', 'CASL RBAC', 'TanStack Query', 'React Hook Form', 'JWT Auth', 'Axios Client'],
-    row2: ['Dark Mode', 'i18n + RTL', 'Protected Routes', 'Role-based Access', 'Dashboard Layout', 'Tailwind v4', 'Auto Logout', 'Token Refresh', 'LocalStorage Sync']
+    row1: [
+      'Next.js 15',
+      'App Router',
+      'MUI v7',
+      'TypeScript',
+      'CASL RBAC',
+      'TanStack Query',
+      'React Hook Form',
+      'JWT Auth',
+      'Axios Client'
+    ],
+    row2: [
+      'Dark Mode',
+      'i18n + RTL',
+      'Protected Routes',
+      'Role-based Access',
+      'Dashboard Layout',
+      'Tailwind v4',
+      'Auto Logout',
+      'Token Refresh',
+      'LocalStorage Sync'
+    ]
   },
 
   // ─── Features ─────────────────────────────────────────────────────────────
@@ -582,8 +602,16 @@ export const landingContent: LandingContent = {
       { label: 'FAQ', href: '#faq' }
     ],
     resourceLinks: [
-      { label: 'Getting Started', href: 'https://shortcut-documentation.vercel.app/docs/getting-started', external: true },
-      { label: 'Authentication', href: 'https://shortcut-documentation.vercel.app/docs/authentication', external: true },
+      {
+        label: 'Getting Started',
+        href: 'https://shortcut-documentation.vercel.app/docs/getting-started',
+        external: true
+      },
+      {
+        label: 'Authentication',
+        href: 'https://shortcut-documentation.vercel.app/docs/authentication',
+        external: true
+      },
       { label: 'API Client', href: 'https://shortcut-documentation.vercel.app/docs/api-client', external: true },
       { label: 'Authorization', href: 'https://shortcut-documentation.vercel.app/docs/authorization', external: true },
       { label: 'MUI Overrides', href: 'https://shortcut-documentation.vercel.app/docs/mui-overrides', external: true },

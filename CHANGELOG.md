@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/Shortcut-Next/shortcut-next/compare/v1.2.5...v1.3.0) (2026-03-02)
+
+
+### Features
+
+* Add Animation components ([4bb1aef](https://github.com/Shortcut-Next/shortcut-next/commit/4bb1aef4650f14203cafdc1865dd3e05a1527c49))
+
 ## [1.2.5](https://github.com/Shortcut-Next/shortcut-next/compare/v1.2.4...v1.2.5) (2026-02-28)
 
 

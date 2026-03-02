@@ -26,7 +26,15 @@ export const routePermissions: RoutePermission[] = [
  * Public routes that don't require authentication
  * These bypass all auth checks
  */
-export const publicRoutes: string[] = ['/', '/login', '/signup', '/forgot-password', '/reset-password', '/unauthorized']
+export const publicRoutes: string[] = [
+  '/',
+  '/login',
+  '/signup',
+  '/forgot-password',
+  '/reset-password',
+  '/unauthorized',
+  '/animations/showcase'
+]
 
 /**
  * Routes that only require authentication (any role can access)

@@ -65,13 +65,22 @@ export default function CTA() {
 
       const title = contentRef.current?.querySelector('h2')
       if (title) {
-        const words = title.textContent?.split(' ') || []
-        title.innerHTML = words
-          .map(
-            word =>
-              `<span style="display: inline-block; overflow: hidden;"><span style="display: inline-block;">${word}</span></span>`
-          )
-          .join(' ')
+        // Build word-reveal spans via the DOM API to avoid assigning
+        // interpolated text to innerHTML (CodeQL DOM-text-reinterpreted-as-HTML).
+        const words = (title.textContent ?? '').split(' ')
+        title.textContent = ''
+        words.forEach((word, i) => {
+          const outer = document.createElement('span')
+          outer.style.cssText = 'display:inline-block;overflow:hidden'
+          const inner = document.createElement('span')
+          inner.style.display = 'inline-block'
+          inner.textContent = word
+          outer.appendChild(inner)
+          title.appendChild(outer)
+          if (i < words.length - 1) {
+            title.appendChild(document.createTextNode(' '))
+          }
+        })
 
         const wordSpans = title.querySelectorAll('span > span')
         gsap.from(wordSpans, {

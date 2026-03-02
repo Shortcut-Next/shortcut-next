@@ -23,10 +23,10 @@ export const navItemVariants = {
   closed: { opacity: 0, y: -4, transition: { duration: 0.1 } }
 }
 
-function renderNavItem(item: NavItem, depth: number) {
+function renderNavItem(item: NavItem, depth: number, isFirstSection?: boolean) {
   switch (SidebarUtils.getItemKind(item)) {
     case 'section':
-      return <SidebarSectionItem item={item as SidebarSection} />
+      return <SidebarSectionItem item={item as SidebarSection} isFirst={isFirstSection} />
     case 'more':
       return <SidebarNavMoreItem item={item as SidebarNavMore} />
     case 'group':
@@ -46,12 +46,15 @@ export default function NavItems({ items, depth = 0, stagger = false }: NavItems
   const ability = useAbility()
   const permitted = items.filter(item => SidebarUtils.itemIsPermitted(item, ability))
 
+  let sectionCount = 0
+
   return (
     <>
       {permitted.map((item, index) => {
         const kind = SidebarUtils.getItemKind(item)
         const key = `${kind}-${index}`
-        const node = renderNavItem(item, depth)
+        const isFirstSection = kind === 'section' ? sectionCount++ === 0 : undefined
+        const node = renderNavItem(item, depth, isFirstSection)
 
         return stagger ? (
           <motion.div key={key} variants={navItemVariants}>

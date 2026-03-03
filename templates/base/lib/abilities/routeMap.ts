@@ -40,4 +40,4 @@ export const publicRoutes: string[] = [
  * Routes that only require authentication (any role can access)
  * No specific permission check needed
  */
-export const authenticatedOnlyRoutes: string[] = ['/home']
+export const authenticatedOnlyRoutes: string[] = ['/home', '/profile']

@@ -22,7 +22,7 @@ export function makePalette(mode: PaletteMode): ThemeOptions['palette'] {
   return {
     customColors: {
       main: mainColor,
-      light: lightColor,
+      light: `rgb(${lightColor})`,
       darkBg: '#0c0c0c',
       lightBg: '#f6f8fc',
       bodyBg: mode === 'light' ? '#f6f8fc' : '#0c0c0c',

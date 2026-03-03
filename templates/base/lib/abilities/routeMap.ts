@@ -10,7 +10,7 @@ import type { RoutePermission } from './types'
  *
  * To add a new protected route:
  * 1. Add an entry here with the pattern, action, and subject
- * 2. That's it - middleware handles the rest
+ * 2. That's it — middleware handles the rest
  */
 export const routePermissions: RoutePermission[] = [
   // Home - accessible to all authenticated users

@@ -31,7 +31,7 @@ export type AppAbility = MongoAbility<[Actions, Subjects]>
 /**
  * Supported user roles
  */
-export type UserRole = 'admin'
+export type UserRole = 'admin' | 'manager' | 'agent' | 'viewer'
 
 /**
  * Minimal user type for authorization checks

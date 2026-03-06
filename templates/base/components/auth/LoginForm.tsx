@@ -2,7 +2,7 @@
 
 import { Stack, Typography, TextField, Button, Divider, IconButton, InputAdornment } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -26,6 +26,7 @@ interface LoginFormProps {
   setShowEmailForm: (show: boolean) => void
   onSwitchToSignup: () => void
   onSocialLogin: (provider: 'google' | 'microsoft') => void
+  fillTrigger?: number
 }
 
 const MotionStack = motion.create(Stack)
@@ -49,7 +50,7 @@ const fadeInUp = {
   }
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ showEmailForm, setShowEmailForm, onSwitchToSignup, onSocialLogin }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ showEmailForm, setShowEmailForm, onSwitchToSignup, onSocialLogin, fillTrigger }) => {
   const { t } = useTranslation()
   const { login, isLoading } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
@@ -74,6 +75,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ showEmailForm, setShowEmailForm, 
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm<LoginFormData>({
     defaultValues: {
@@ -82,6 +84,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ showEmailForm, setShowEmailForm, 
     },
     resolver: yupResolver(loginSchema)
   })
+
+  useEffect(() => {
+    if (fillTrigger) {
+      setValue('email', 'admin@test.com')
+      setValue('password', 'password123')
+    }
+  }, [fillTrigger, setValue])
 
   const onSubmit = async (data: LoginFormData) => {
     setErrorMessage('')

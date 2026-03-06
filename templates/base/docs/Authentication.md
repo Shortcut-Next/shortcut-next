@@ -293,3 +293,175 @@ On every page load, `AuthProvider` runs `initAuth()` in a `useEffect`:
 4. Sets `isLoading = false` when done
 
 This means authenticated users see their content immediately on reload without waiting for a server round-trip.
+
+---
+
+## Moving from Mock Data to Real API
+
+The template ships with [MSW (Mock Service Worker)](https://mswjs.io/) enabled for development. Once your backend is ready, follow these steps to remove the mocks and fetch real data.
+
+### Step 1 — Disable MSW
+
+MSW is controlled by the environment variable `NEXT_PUBLIC_ENABLE_MOCKS`. To stop intercepting requests and let them reach your real backend, set it to `false` (or remove it entirely):
+
+```env
+# .env.local
+NEXT_PUBLIC_ENABLE_MOCKS=false
+```
+
+The mock initialization in `lib/mocks/index.ts` checks this flag and skips setup when it is absent or `false`.
+
+---
+
+### Step 2 — Create a feature client
+
+For each resource you need to fetch, create a dedicated client file inside `core/clients/`. The client holds the raw async functions that call your backend via `apiClient`.
+
+**Example — `core/clients/WorkspaceClient.ts`:**
+
+```ts
+import apiClient from './apiClient'
+
+export interface Workspace {
+  id: string
+  name: string
+}
+
+export async function getWorkspaces(): Promise<Workspace[]> {
+  const { data } = await apiClient.get<Workspace[]>('/workspaces')
+  return data
+}
+
+export async function getWorkspace(id: string): Promise<Workspace> {
+  const { data } = await apiClient.get<Workspace>(`/workspaces/${id}`)
+  return data
+}
+
+export async function createWorkspace(payload: Omit<Workspace, 'id'>): Promise<Workspace> {
+  const { data } = await apiClient.post<Workspace>('/workspaces', payload)
+  return data
+}
+
+export async function updateWorkspace(id: string, payload: Partial<Workspace>): Promise<Workspace> {
+  const { data } = await apiClient.patch<Workspace>(`/workspaces/${id}`, payload)
+  return data
+}
+
+export async function deleteWorkspace(id: string): Promise<void> {
+  await apiClient.delete(`/workspaces/${id}`)
+}
+```
+
+`apiClient` already handles Bearer token injection, automatic token refresh on 401, and logout on 403 — you don't need to add any auth logic here.
+
+---
+
+### Step 3 — Create TanStack Query hooks
+
+Create a folder named after the resource inside `core/clients/` and add two files: `queries.ts` for read operations and `mutations.ts` for write operations.
+
+**`core/clients/workspace/queries.ts`:**
+
+```ts
+import { useQuery } from '@tanstack/react-query'
+import { getWorkspaces, getWorkspace } from '../WorkspaceClient'
+
+export const workspaceKeys = {
+  all: ['workspaces'] as const,
+  list: () => [...workspaceKeys.all, 'list'] as const,
+  detail: (id: string) => [...workspaceKeys.all, 'detail', id] as const,
+}
+
+export function useWorkspaces() {
+  return useQuery({
+    queryKey: workspaceKeys.list(),
+    queryFn: getWorkspaces,
+  })
+}
+
+export function useWorkspace(id: string) {
+  return useQuery({
+    queryKey: workspaceKeys.detail(id),
+    queryFn: () => getWorkspace(id),
+    enabled: Boolean(id),
+  })
+}
+```
+
+**`core/clients/workspace/mutations.ts`:**
+
+```ts
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createWorkspace, updateWorkspace, deleteWorkspace } from '../WorkspaceClient'
+import { workspaceKeys } from './queries'
+
+export function useCreateWorkspace() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: createWorkspace,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: workspaceKeys.all }),
+  })
+}
+
+export function useUpdateWorkspace(id: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload: Parameters<typeof updateWorkspace>[1]) => updateWorkspace(id, payload),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: workspaceKeys.all }),
+  })
+}
+
+export function useDeleteWorkspace() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: deleteWorkspace,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: workspaceKeys.all }),
+  })
+}
+```
+
+---
+
+### Step 4 — Use the hooks in your components
+
+```tsx
+'use client'
+import { useWorkspaces } from '@/core/clients/workspace/queries'
+import { useCreateWorkspace } from '@/core/clients/workspace/mutations'
+
+export default function WorkspacesPage() {
+  const { data: workspaces, isLoading } = useWorkspaces()
+  const create = useCreateWorkspace()
+
+  if (isLoading) return <div>Loading...</div>
+
+  return (
+    <div>
+      {workspaces?.map(ws => <div key={ws.id}>{ws.name}</div>)}
+      <button onClick={() => create.mutate({ name: 'New Workspace' })}>
+        Add Workspace
+      </button>
+    </div>
+  )
+}
+```
+
+---
+
+### Folder structure reference
+
+```text
+core/
+  clients/
+    apiClient.ts              ← Axios instance (do not modify)
+    WorkspaceClient.ts        ← Raw async functions for /workspaces
+    workspace/
+      queries.ts              ← useWorkspaces, useWorkspace
+      mutations.ts            ← useCreateWorkspace, useUpdateWorkspace, useDeleteWorkspace
+    UserClient.ts             ← Raw async functions for /users
+    user/
+      queries.ts
+      mutations.ts
+```
+
+This pattern is a convention, not a requirement. You are free to reorganise it to suit your project structure.

@@ -30,7 +30,6 @@ export type AppAbility = MongoAbility<[Actions, Subjects]>
 
 /**
  * Supported user roles
- * Hierarchy: admin > manager > agent > viewer
  */
 export type UserRole = 'admin' | 'manager' | 'agent' | 'viewer'
 

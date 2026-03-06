@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, Box, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Button, Snackbar, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
@@ -153,8 +153,14 @@ const HeroAfter = () => {
 export default function LoginPage() {
   const [currentView, setCurrentView] = useState<'login' | 'signup'>('login')
   const [showEmailForm, setShowEmailForm] = useState(false)
+  const [fillTrigger, setFillTrigger] = useState(0)
   const { language } = useLanguage()
   const isRTL = language === 'ar'
+
+  const handleFillCredentials = () => {
+    setShowEmailForm(true)
+    setFillTrigger(t => t + 1)
+  }
 
   const handleSocialLogin = (provider: 'google' | 'microsoft') => {
     console.log(`Login with ${provider}`)
@@ -268,6 +274,7 @@ export default function LoginPage() {
                   setShowEmailForm={setShowEmailForm}
                   onSwitchToSignup={handleSwitchToSignup}
                   onSocialLogin={handleSocialLogin}
+                  fillTrigger={fillTrigger}
                 />
               </MotionBox>
             ) : (
@@ -284,6 +291,18 @@ export default function LoginPage() {
           </AnimatePresence>
         </Box>
       </MotionBox>
+
+      <Snackbar
+        open={currentView === 'login'}
+        message='Test credentials: admin@test.com / password123'
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        sx={{ zIndex: 20, '& .MuiSnackbarContent-message': { fontSize: '0.8rem' } }}
+        action={
+          <Button color='primary' size='small' variant='contained' onClick={handleFillCredentials}>
+            Fill
+          </Button>
+        }
+      />
     </Box>
   )
 }

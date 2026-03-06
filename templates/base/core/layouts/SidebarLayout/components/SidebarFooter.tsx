@@ -3,13 +3,8 @@
 import type { ReactNode } from 'react'
 import { Box, Button, Card, CardContent, Divider, Typography } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
-<<<<<<< Updated upstream
-import { useSidebar } from '../SidebarContext'
 import { hexToRGBA } from '@/core/utils/hex-to-rgba'
-=======
 import { useSidebar } from '../context/SidebarContext'
-import ProfileButton from './ProfileButton'
->>>>>>> Stashed changes
 
 interface SidebarFooterProps {
   footer?: ReactNode

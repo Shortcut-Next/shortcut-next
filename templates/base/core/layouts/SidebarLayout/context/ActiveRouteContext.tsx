@@ -3,8 +3,8 @@
 import { createContext, useContext, useMemo } from 'react'
 import type { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
-import { SidebarUtils } from './utils/SidebarUtils'
 import type { SidebarNavItems } from '@/core/layouts/types'
+import { SidebarUtils } from '../utils/SidebarUtils'
 
 const ActiveRouteContext = createContext<string | null>(null)
 

@@ -3,15 +3,15 @@
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { alpha, Box, IconButton, Stack, useMediaQuery, useTheme } from '@mui/material'
-import { Menu } from 'lucide-react'
-import { SidebarProvider, useSidebar } from './SidebarContext'
-import { Sidebar, SIDEBAR_WIDTH, SIDEBAR_COLLAPSED_WIDTH } from './Sidebar'
-import { ActiveRouteProvider } from './ActiveRouteContext'
-import { FavoritesProvider } from './FavoritesContext'
+import { SidebarProvider, useSidebar } from './context/SidebarContext'
+import { Sidebar, SIDEBAR_WIDTH, SIDEBAR_COLLAPSED_WIDTH } from './components/Sidebar'
+import { FavoritesProvider } from './context/FavoritesContext'
 import type { SidebarNavItems } from '@/core/layouts/types'
 import useLanguage from '@/core/hooks/useLanguage'
 import CommandPalette from './components/CommandPalette'
+import { ActiveRouteProvider } from './context/ActiveRouteContext'
 import ThemeToggle from '@/components/common/ThemeToggle'
+import { Menu } from 'lucide-react'
 
 interface SidebarLayoutProps {
   children: ReactNode

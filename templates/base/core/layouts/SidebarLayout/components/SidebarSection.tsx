@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Box, Divider, IconButton, Tooltip, Typography } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-import { useSidebar } from '../SidebarContext'
+import { useSidebar } from '../context/SidebarContext'
 import NavItems from './NavItems'
 import { SectionHeaderRow, NavCollapseGrid } from '../ui/SidebarStyledComponents'
 import type { SidebarSection } from '@/core/layouts/types'
@@ -17,7 +17,7 @@ interface Props {
   isFirst?: boolean
 }
 
-export default function SidebarSectionItem({ item, isFirst = false}: Props) {
+export default function SidebarSectionItem({ item, isFirst = false }: Props) {
   const { isCollapsed } = useSidebar()
   const router = useRouter()
   const { language } = useLanguage()

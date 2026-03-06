@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
+<<<<<<< Updated upstream
 import { alpha, Box, IconButton, Stack, useMediaQuery, useTheme } from '@mui/material'
 import { Menu } from 'lucide-react'
 import { SidebarProvider, useSidebar } from './SidebarContext'
@@ -12,6 +13,17 @@ import type { SidebarNavItems } from '@/core/layouts/types'
 import useLanguage from '@/core/hooks/useLanguage'
 import CommandPalette from './components/CommandPalette'
 import ThemeToggle from '@/components/common/ThemeToggle'
+=======
+import { Box, Stack, useMediaQuery, useTheme } from '@mui/material'
+import { SidebarProvider, useSidebar } from './context/SidebarContext'
+import { Sidebar, SIDEBAR_WIDTH, SIDEBAR_COLLAPSED_WIDTH } from './components/Sidebar'
+import { FavoritesProvider } from './context/FavoritesContext'
+import type { SidebarNavItems } from '@/core/layouts/types'
+import useLanguage from '@/core/hooks/useLanguage'
+import CommandPalette from './components/CommandPalette'
+import Navbar, { NAVBAR_HEIGHT } from './components/Navbar'
+import { ActiveRouteProvider } from './context/ActiveRouteContext'
+>>>>>>> Stashed changes
 
 interface SidebarLayoutProps {
   children: ReactNode

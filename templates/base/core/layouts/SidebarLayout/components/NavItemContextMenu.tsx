@@ -2,7 +2,7 @@
 
 import { Divider, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material'
 import { ExternalLink, Link, Pin, PinOff } from 'lucide-react'
-import { useFavorites } from '../FavoritesContext'
+import { useFavorites } from '../context/FavoritesContext'
 
 interface NavItemContextMenuProps {
   anchorPosition: { top: number; left: number } | null
@@ -44,13 +44,17 @@ export default function NavItemContextMenu({ anchorPosition, onClose, item }: Na
     >
       {hasPath && (
         <MenuItem onClick={handleOpenNewTab}>
-          <ListItemIcon><ExternalLink size={16} /></ListItemIcon>
+          <ListItemIcon>
+            <ExternalLink size={16} />
+          </ListItemIcon>
           <ListItemText>Open in new tab</ListItemText>
         </MenuItem>
       )}
       {hasPath && (
         <MenuItem onClick={handleCopyLink}>
-          <ListItemIcon><Link size={16} /></ListItemIcon>
+          <ListItemIcon>
+            <Link size={16} />
+          </ListItemIcon>
           <ListItemText>Copy link</ListItemText>
         </MenuItem>
       )}

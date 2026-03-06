@@ -6,7 +6,7 @@ import { Box } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { Icon } from '@iconify/react'
-import { useSidebar } from '../SidebarContext'
+import { useSidebar } from '../context/SidebarContext'
 import NavItems from './NavItems'
 import NavItemContextMenu from './NavItemContextMenu'
 import SidebarAnimatedLabel from './SidebarAnimatedLabel'
@@ -62,7 +62,10 @@ export default function SidebarNavGroupItem({ item, depth = 0 }: Props) {
               gap={1.5}
               isActive={activeChild}
               onClick={() => setIsOpen(v => !v)}
-              onContextMenu={e => { e.preventDefault(); setContextMenu({ top: e.clientY, left: e.clientX }) }}
+              onContextMenu={e => {
+                e.preventDefault()
+                setContextMenu({ top: e.clientY, left: e.clientX })
+              }}
               role='button'
               tabIndex={0}
               onKeyDown={e => {

@@ -11,6 +11,7 @@ import Spinner from '@/components/loaders/Spinner'
 import { AuthProvider } from '@/core/context/AuthContext'
 import MSWProvider from '@/providers/MSWProvider'
 import '@/core/icons/customIcons'
+import PageShifter from '@/components/wrappers/PageShifter'
 
 function InnerProviders({ children, client }: { children: React.ReactNode; client: QueryClient }) {
   const { settings } = useSettings()
@@ -33,7 +34,9 @@ export default function AppProviders({ children }: { children: React.ReactNode }
     <MSWProvider>
       <AuthProvider>
         <SettingsProvider>
-          <InnerProviders client={client}>{children}</InnerProviders>
+          <InnerProviders client={client}>
+            <PageShifter>{children}</PageShifter>
+          </InnerProviders>
         </SettingsProvider>
       </AuthProvider>
     </MSWProvider>
